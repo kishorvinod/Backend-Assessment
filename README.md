@@ -7,7 +7,7 @@ Logezy - Backend Assignment
 - Git (optional)
 
 
-For this project we have used Prisma as the ORM
+For this project I  have used Prisma as the ORM
 
 I have completed Module 1 User and 3 Task Management in this assessment
 
