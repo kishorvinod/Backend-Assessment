@@ -9,6 +9,8 @@ Logezy - Backend Assignment
 
 For this project we have used Prisma as the ORM
 
+I have completed Module 1 and 4 in this assessment
+
 ## 1. Start Postgres (Docker)
 Run a local Postgres container (example):
 ```bash
