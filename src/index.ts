@@ -3,8 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { setupSwagger } from "./lib/swagger"; // Import Swagger setup
 import authRouter from "./routes/auth.routes";
-import dynamicRouter from "./routes/dynamic.routes";
 import userRouter from "./routes/user.routes";
+import taskRouter from "./routes/task.route";
 
 import helmet from "helmet";
 import morgan from "morgan";
@@ -80,7 +80,7 @@ const startServer = async () => {
         // Mount API Routes
         app.use("/api/auth", authRouter);
         app.use("/api/users", userRouter);
-        app.use("/api/d", dynamicRouter);
+        app.use("/api/tasks", taskRouter);
         
         const PORT = process.env.PORT ?? 5001;
         const server = app.listen(PORT, () => {
@@ -119,4 +119,4 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 
 startServer();
 
-export default app; 
+export default app;
