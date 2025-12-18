@@ -1,0 +1,91 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     String                 @id @default(uuid())
+  email                  String                 @unique
+  password               String
+  name                   String
+  systemRole             SystemRole             @default(USER)
+  extras                 Json?
+  status                 userStatus              @default(active)
+  created_at              DateTime               @default(now())
+  updated_at              DateTime               @updatedAt
+
+  // relations
+  token                  UserToken?
+  tasksAssigned          Task[]                 @relation("AssignedTasks")
+  tasksCreated           Task[]                 @relation("CreatedTasks")
+  comments               TaskComment[]
+}
+
+model UserToken {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  isVerified       Boolean   @default(false)
+  verifyToken      String?
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  refreshToken     String?
+
+  // relation to User
+  user             User      @relation(fields: [userId], references: [id])
+}
+
+
+model Task {
+  id                   String                 @id @default(uuid())
+  title                String
+  description          String
+  status               taskStatus             @default(pending)
+  assigned_to          String
+  created_by           String
+  completed_at          DateTime               
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @updatedAt
+
+  // relations to User and comments
+  assignedTo           User                   @relation("AssignedTasks", fields: [assigned_to], references: [id])
+  createdBy            User                   @relation("CreatedTasks", fields: [created_by], references: [id])
+  comments             TaskComment[]
+  
+}
+
+model TaskComment {
+  id                   String                 @id @default(uuid())
+  task_id              String
+  user_id              String
+  comment              String
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @updatedAt
+
+  // relations
+  task                 Task                   @relation(fields: [task_id], references: [id])
+  user                 User                   @relation(fields: [user_id], references: [id])
+  
+}
+
+enum SystemRole {
+  USER
+  ADMIN
+}
+
+enum userStatus {
+  active
+  inactive
+}
+
+enum taskStatus {
+  pending
+  in_progress
+  completed
+}
+
